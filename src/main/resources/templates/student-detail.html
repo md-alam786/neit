@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 60%;
+            margin: 40px auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        .detail-box {
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .detail-box p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 12px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h2>Student Details</h2>
+<div class="detail-box">
+    <p><strong>ID:</strong> <span th:text="${student.studentId}"></span></p>
+    <p><strong>First Name:</strong> <span th:text="${student.firstName}"></span></p>
+    <p><strong>Last Name:</strong> <span th:text="${student.lastName}"></span></p>
+    <p><strong>DOB:</strong> <span th:text="${student.dob}"></span></p>
+    <p><strong>Gender:</strong> <span th:text="${student.gender}"></span></p>
+    <p><strong>Qulification:</strong> <span th:text="${student.qualification}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${student.email}"></span></p>
+    <p><strong>PhoneNo:</strong> <span th:text="${student.phone}"></span></p>
+    <p><strong>Address:</strong> <span th:text="${student.address}"></span></p>
+    <p><strong>Photo:</strong> <span th:text="${student.photoPath}"></span></p>
+    <p><strong>Document:</strong> <span th:text="${student.documentPath}"></span></p>
+
+</div>
+
+<a th:href="@{/students/view}" class="back-btn">Back to List</a>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Home - Admin Management System</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div th:replace="/header :: header"></div>
+
+<!--
+
+<div th:if="${successMessage}">
+  <script>
+    alert([[${successMessage}]]);
+  </script>
+</div>
+-->
+
+
+
+<div class="hero">
+  <h2>Welcome to the Admin Management System</h2>
+  <p>Manage your Admins and SuperAdmins efficiently.</p>
+  <a th:href="@{/admin-superadmin/view}" class="btn">Get Started</a>
+</div>
+
+<section>
+  <h3>Quick Links</h3>
+  <ul>
+    <li><a th:href="@{/admin-superadmin/view}">View All Users</a></li>
+    <li><a th:href="@{/admin-superadmin/create}">Create New Admin</a></li>
+    <li><a th:href="@{/settings}">System Settings</a></li>
+  </ul>
+</section>
+
+<div th:replace="/footer :: footer"></div>
+
+</body>
+</html>

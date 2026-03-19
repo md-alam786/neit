@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<div th:fragment="header">
+  <header style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>Admin Management System</h1>
+
+    <nav style="display:flex; align-items:center; gap:15px;">
+      <a th:href="@{/home}">Home</a>
+      <a th:href="@{/about}">About</a>
+      <a th:href="@{/contact}">Contact</a>
+      <a th:href="@{/students/register}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">Student Register</a>
+      <a th:href="@{/admin-superadmin/view}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">View Users</a>
+      <a th:href="@{/admin-superadmin/create}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">Create Admin</a>
+
+      <!-- Show only if user is logged in -->
+      <div style="display:flex; align-items:center; gap:10px;" sec:authorize="isAuthenticated()">
+        <img src="/images/profile.png" alt="Profile" style="width:40px; height:40px; border-radius:50%;"/>
+        <span sec:authentication="name"></span>
+        <span sec:authentication="principal.authorities"></span>
+
+        <form th:action="@{/logout}" method="post" style="margin:0;">
+          <button type="submit" style="background:none; border:none; cursor:pointer;">
+            <img src="/images/logout.png" alt="Logout" style="width:24px; height:24px;"/>
+          </button>
+        </form>
+      </div>
+      <!-- Show only if user is NOT logged in -->
+      <div sec:authorize="isAnonymous()">
+        <a th:href="@{/login}">
+          <button type="button">Login</button>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+  <hr/>
+</div>

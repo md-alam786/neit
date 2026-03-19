@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>About - Admin Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<!-- Include header fragment -->
+<div th:replace="/header :: header"></div>
+
+<div class="container">
+    <h2>About the System</h2>
+    <p>
+        The Admin Management System is designed to help organizations manage
+        administrators and super administrators efficiently. It provides secure
+        role-based access, user management, and streamlined workflows for
+        handling student and admin data.
+    </p>
+
+    <h3>Features</h3>
+    <ul>
+        <li>Role-based access control (Admin, SuperAdmin, Student)</li>
+        <li>Secure login and logout functionality</li>
+        <li>View and manage users</li>
+        <li>Create new Admins and SuperAdmins</li>
+    </ul>
+
+    <h3>Our Mission</h3>
+    <p>
+        To provide a simple, secure, and scalable platform for managing users
+        and administrators, ensuring smooth operations and data integrity.
+    </p>
+</div>
+
+<!-- Include footer fragment -->
+<div th:replace="/footer :: footer"></div>
+
+</body>
+</html>

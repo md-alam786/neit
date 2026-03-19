@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Registration</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div th:replace="/header :: header"></div>
+
+<div class="container">
+    <h2>Student Registration</h2>
+
+    <form id="studentForm" th:action="@{/students/register}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <label>First Name:</label>
+        <input type="text" name="firstName" required/><br/><br/>
+
+        <label>Last Name:</label>
+        <input type="text" name="lastName" required/><br/><br/>
+
+        <label>Date of Birth:</label>
+        <input type="date" name="dob" required/><br/><br/>
+
+        <label>Gender:</label>
+        <select name="gender" required>
+            <option value="">--Select--</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select><br/><br/>
+
+        <label>Highest Qualification:</label>
+        <input type="text" name="qualification" required/><br/><br/>
+
+        <label>Address:</label>
+        <textarea name="address" rows="3" required></textarea><br/><br/>
+
+        <label>Phone Number:</label>
+        <input type="text" name="phone" required/><br/><br/>
+
+        <label>Email:</label>
+        <input type="email" name="email" required/><br/><br/>
+
+        <label>Photo Upload:</label>
+        <input type="file" name="photo" accept="image/*" required/><br/><br/>
+
+        <label>Document Upload:</label>
+        <input type="file" name="document" accept=".pdf,.jpg,.png" required/><br/><br/>
+
+        <label>Document Type:</label>
+        <select name="documentType" required>
+            <option value="">--Select--</option>
+            <option value="Aadhar">Aadhar</option>
+            <option value="Voter">Voter ID</option>
+            <option value="DrivingLicence">Driving Licence</option>
+            <option value="Passport">Passport</option>
+        </select><br/><br/>
+
+        <button type="submit">Register Student</button>
+    </form>
+</div>
+
+<div th:replace="/footer :: footer"></div>
+
+
+<script>
+    document.getElementById("studentForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        fetch(this.action, {
+            method: "POST",
+            body: new FormData(this)
+        }).then(response => {
+            if (response.ok) {
+                alert("Form has been submitted successfully!");
+                window.location.href = "/home";
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>
