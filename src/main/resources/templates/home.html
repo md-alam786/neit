@@ -18,6 +18,7 @@
 -->
 
 
+<!--
 
 <div class="hero">
   <h2>Welcome to the Admin Management System</h2>
@@ -33,6 +34,55 @@
     <li><a th:href="@{/settings}">System Settings</a></li>
   </ul>
 </section>
+-->
+
+
+
+
+
+<!-- Hero Banner -->
+<section class="hero">
+  <div class="hero-content">
+    <h2>Welcome to NEIT Dashboard</h2>
+    <p>Manage your role-specific tasks and explore features tailored for you.</p>
+    <a th:href="@{/login}" class="hero-button">Get Started</a>
+  </div>
+</section>
+
+<!-- Dashboard Section -->
+<section class="dashboard">
+  <h2>Your Dashboard</h2>
+  <p>Here you can manage your role-specific tasks and view important updates.</p>
+</section>
+
+<!-- Role Section -->
+<section class="roles">
+  <div class="role-card student">
+    <div> <img src="/images/student1.png" alt="Tile 1"></div>
+    <h3>Student</h3>
+    <p>View and update your profile.</p>
+    <a th:href="@{/student/dashboard}">Go to Student Dashboard</a>
+  </div>
+  <div class="role-card admin">
+    <div> <img src="/images/student2.png" alt="Tile 1"></div>
+    <h3>Admin</h3>
+    <p>Register students and manage applications.</p>
+    <a th:href="@{/admin/dashboard}">Go to Admin Dashboard</a>
+  </div>
+  <div class="role-card superadmin">
+    <div> <img src="/images/student3.png" alt="Tile 1"></div>
+    <h3>SuperAdmin</h3>
+    <p>Create and manage Admin accounts.</p>
+    <a th:href="@{/superadmin/dashboard}">Go to SuperAdmin Dashboard</a>
+  </div>
+</section>
+
+<!-- Dashboard2 Section -->
+<section class="dashboard2">
+  <h2>Your Dashboard2</h2>
+  <p>Here you can manage your role-specific tasks and view important updates.</p>
+</section>
+
 
 <div th:replace="/footer :: footer"></div>
 

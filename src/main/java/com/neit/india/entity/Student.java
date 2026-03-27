@@ -11,6 +11,11 @@ public class Student {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentId;
 
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;   // always required
+
+    private String password;   // store encoded
+
     @Column(name = "firstName", nullable = false, length = 100)
     private String firstName;
 
@@ -32,8 +37,8 @@ public class Student {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "email",unique = true)
+    private String email;   // optional, may be null
 
     @Column(name = "photoPath")
     private String photoPath;     // store file path or URL
@@ -141,5 +146,21 @@ public class Student {
 
     public void setDocumentType(String documentType) {
         this.documentType = documentType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

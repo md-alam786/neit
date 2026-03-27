@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/about", "/contact", "/students/view", "students/view/{id}", "/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/home", "/about", "/contact", "/students/view", "students/view/{id}", "/login", "/images/**","/css/**", "/js/**").permitAll()
 
                         // Student pages
                         .requestMatchers("/students/view").permitAll() // if you want public view
@@ -29,10 +29,10 @@ public class SecurityConfig {
                         .requestMatchers("/students/**").hasRole("STUDENT") // other student URLs
 
                         // Admin pages
-                        .requestMatchers("/admin/**", "/admin-superadmin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**", "/students/**", "/admin-superadmin/**").hasRole("ADMIN")
 
                         // SuperAdmin pages
-                        .requestMatchers("/superadmin/**").hasRole("SUPERADMIN")
+                        .requestMatchers("/superadmin/**", "/admin-superadmin/**", "/students/delete/**").hasRole("SUPERADMIN")
 
 
 
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 )
 
                 .logout(logout -> logout.permitAll());
-
+        System.out.println("SecurityConfig run :: ");
         return http.build();
     }
 

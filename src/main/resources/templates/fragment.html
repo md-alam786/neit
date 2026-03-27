@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:flex-direction="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.png}" />
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- Header Fragment -->
+<div th:fragment="header">
+    <header>
+        <img src="/images/logo.jpg" alt="Logo" class="logo-icon">
+        <h style="margin-left: -20%;">NEIT India</h>
+        <nav>
+            <a th:href="@{/home}">Home</a>
+            <a th:href="@{/about}">About</a>
+            <a th:href="@{/contact}">Contact Us</a>
+            <a th:href="@{/login}">Login</a>
+        </nav>
+
+
+        <!-- Profile + Logout section -->
+        <div class="profile">
+            <div sec:authorize="isAuthenticated()" style="display:flex; align-items:center; gap:10px;">
+                <img th:if="${student != null}" th:src="@{${student.photoPath}}"
+                     alt="Profile Photo" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"/>
+                <img th:if="${student == null}" src="/images/profile.png"
+                     alt="Default Avatar" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"/>
+                <div flex-direction:column;>
+                    <span sec:authentication="name"></span>
+                    <!--<span sec:authentication="principal.authorities"></span>-->
+                    <span th:text="${#authentication.authorities[0].authority.replace('ROLE_', '')}"></span>
+
+                </div>
+               <div>
+                <form th:action="@{/logout}" method="post" >
+                    <button type="submit" style="background:none; border:none; cursor:pointer;">
+                        <img src="/images/logout-img.png" alt="Logout" style="width:40px; height:40px; border-radius:50%; object-fit:cover; margin-top: -25px;" />
+                    </button>
+                </form>
+              </div>
+            </div>
+
+
+            <!-- Logout icon -->
+           <!-- <a th:href="@{/logout}" class="logout-link">
+                <img src="/images/logout-img.png" alt="Logout" class="profile-icon"> </a>
+-->
+            <!-- Show only if user is NOT logged in -->
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">
+                    <button type="button">Login</button>
+                </a>
+            </div>
+        </div>
+    </header>
+</div>
+
+<!-- Footer Fragment -->
+<div th:fragment="footer">
+    <footer>
+        <p>&copy; 2026 NEIT | All Rights Reserved</p>
+        <div>
+            <a th:href="@{/privacy}">Privacy Policy</a> |
+            <a th:href="@{/terms}">Terms of Service</a>
+        </div>
+        <p>
+            <a href="#">Facebook</a> |
+            <a href="#">Twitter</a> |
+            <a href="#">LinkedIn</a>
+        </p>
+    </footer>
+</div>
+</body>
+</html>

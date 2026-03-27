@@ -6,19 +6,23 @@
 
 <div th:fragment="header">
   <header style="display:flex; justify-content:space-between; align-items:center;">
-    <h1>Admin Management System</h1>
+    <h1>ABC</h1>
 
     <nav style="display:flex; align-items:center; gap:15px;">
       <a th:href="@{/home}">Home</a>
       <a th:href="@{/about}">About</a>
       <a th:href="@{/contact}">Contact</a>
+      <a th:href="@{/students/view}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">Student List</a>
       <a th:href="@{/students/register}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">Student Register</a>
       <a th:href="@{/admin-superadmin/view}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">View Users</a>
       <a th:href="@{/admin-superadmin/create}" sec:authorize="hasAnyRole('ADMIN','SUPERADMIN')">Create Admin</a>
 
       <!-- Show only if user is logged in -->
       <div style="display:flex; align-items:center; gap:10px;" sec:authorize="isAuthenticated()">
-        <img src="/images/profile.png" alt="Profile" style="width:40px; height:40px; border-radius:50%;"/>
+        <!--<img src="/images/profile.png" alt="Profile" style="width:40px; height:40px; border-radius:50%;"/>
+       -->
+        <img th:src="${profilePhoto != null} ? @{${profilePhoto}} : @{/images/profile.png}"
+             alt="Profile" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"/>
         <span sec:authentication="name"></span>
         <span sec:authentication="principal.authorities"></span>
 
@@ -28,6 +32,7 @@
           </button>
         </form>
       </div>
+
       <!-- Show only if user is NOT logged in -->
       <div sec:authorize="isAnonymous()">
         <a th:href="@{/login}">

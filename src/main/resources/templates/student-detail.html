@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,7 +37,12 @@
         }
     </style>
 </head>
+
 <body>
+<!-- Include header fragment -->
+<div th:replace="/fragment :: header"></div>
+
+<div class="container">
 <h2>Student Details</h2>
 <div class="detail-box">
     <p><strong>ID:</strong> <span th:text="${student.studentId}"></span></p>
@@ -48,11 +54,21 @@
     <p><strong>Email:</strong> <span th:text="${student.email}"></span></p>
     <p><strong>PhoneNo:</strong> <span th:text="${student.phone}"></span></p>
     <p><strong>Address:</strong> <span th:text="${student.address}"></span></p>
-    <p><strong>Photo:</strong> <span th:text="${student.photoPath}"></span></p>
+    <!--<p><strong>Photo:</strong> <span th:text="${student.photoPath}"></span></p>
     <p><strong>Document:</strong> <span th:text="${student.documentPath}"></span></p>
+   --> <p><strong>Photo:</strong> <img th:src="@{${student.photoPath}}" alt="Student Photo"></p>
+    <p><strong>Document:</strong> <a th:href="@{${student.documentPath}}">Download Document</a></p>
 
 </div>
 
+<div>
 <a th:href="@{/students/view}" class="back-btn">Back to List</a>
+</div>
+
+
+</div>
+<!-- Include footer fragment -->
+<div th:replace="/fragment :: footer"></div>
+
 </body>
 </html>

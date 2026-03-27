@@ -1,9 +1,8 @@
 package com.neit.india.controller;
 
-
 import com.neit.india.entity.Student;
 import com.neit.india.repository.StudentRepository;
-import com.neit.india.service.CustomUserDetailsService;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,27 +11,48 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
+
+
 
 @Controller
 @RequestMapping("/students")
 public class StudentController {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(StudentController.class);
+    private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
+
+    @GetMapping("/home")
+    public String home(Model model, Principal principal) {
+        String username = principal.getName(); // logged-in username/email
+        Student student = studentRepository.findByUsername(username)
+                .orElse(null);
+
+        model.addAttribute("student", student);
+        return "home"; // template that includes header fragment
+    }
 
     @GetMapping("/view")
     public String viewStudents(Model model) {
@@ -50,20 +70,6 @@ public class StudentController {
     }
 
 
-
-    // Show the form
-    @GetMapping("/form")
-    public String showForm(Model model) {
-        model.addAttribute("student", new Student());
-        return "student-form"; // student-form.html
-    }
-
-    // Handle form submission
-    @PostMapping("/save")
-    public String saveStudent(@ModelAttribute Student student) {
-        studentRepository.save(student);
-        return "redirect:/students/view"; // redirect to list page
-    }
 
     // Show edit form
     @GetMapping("/edit/{id}")
@@ -122,6 +128,13 @@ public class StudentController {
                                   @RequestParam String documentType,
                                   Model model, RedirectAttributes redirectAttributes) throws IOException {
 
+        // ✅ Check for duplicate email before saving
+        if (studentRepository.findByEmail(email).isPresent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Email already exists in database!");
+            return "redirect:/students/register";
+        }
+
+
         Student student = new Student();
         student.setFirstName(firstName);
         student.setLastName(lastName);
@@ -133,12 +146,18 @@ public class StudentController {
         student.setEmail(email);
         student.setDocumentType(documentType);
 
+        // Generate credentials
+        String generatedUsername = student.getEmail();
+        String rawPassword = UUID.randomUUID().toString().substring(0, 8);
+        student.setUsername(generatedUsername);
+        student.setPassword(passwordEncoder.encode(rawPassword));
+
         // Save student first to get ID
         student = studentRepository.save(student);
 
         // Create upload directories if not exist
-        java.nio.file.Path photoDir = Paths.get("uploads/photos");
-        java.nio.file.Path docDir = Paths.get("uploads/docs");
+        Path photoDir = Paths.get("uploads/photos");
+        Path docDir = Paths.get("uploads/docs");
         Files.createDirectories(photoDir);
         Files.createDirectories(docDir);
 
@@ -158,14 +177,35 @@ public class StudentController {
         Files.copy(document.getInputStream(), docPath, StandardCopyOption.REPLACE_EXISTING);
 
         // Update student record with file paths
-        student.setPhotoPath(photoPath.toString());
-        student.setDocumentPath(docPath.toString());
-        studentRepository.save(student);
+//        student.setPhotoPath(photoPath.toString());
+//        student.setDocumentPath(docPath.toString());
+        student.setPhotoPath("/uploads/photos/" + photoFileName);
+        student.setDocumentPath("/uploads/docs/" + docFileName);
 
-        model.addAttribute("successMessage", "Student " + firstName + " registered successfully!");
+        studentRepository.save(student); // update with file paths
 
 
-     /*   redirectAttributes.addFlashAttribute("successMessage", "Form has been submitted successfully!");
+      /*  model.addAttribute("successMessage", "Student " + firstName + " registered successfully!");
+*/
+
+// Send email
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("yourgmail@gmail.com"); // must match spring.mail.username
+        message.setTo(student.getEmail());
+        message.setSubject("Your Student Login Credentials");
+        message.setText("Dear " + student.getFirstName() + ",\n\n" +
+                "Your account has been created successfully.\n" +
+                "Username: " + generatedUsername + "\n" +
+                "Password: " + rawPassword + "\n\n" +
+                "Please log in at http://localhost:8080/login and change your password after first login.\n\n" +
+                "Regards,\nNEIT India");
+        mailSender.send(message);
+
+        redirectAttributes.addFlashAttribute("successMessage",
+                "Student registered successfully! Login credentials have been sent to " + student.getEmail());
+
+
+        /*   redirectAttributes.addFlashAttribute("successMessage", "Form has been submitted successfully!");
      */   return "redirect:/home"; // or redirect:/students/view if you want list page
 
     }

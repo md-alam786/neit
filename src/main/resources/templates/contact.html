@@ -7,28 +7,39 @@
 <body>
 
 <!-- Include header fragment -->
-<div th:replace="/header :: header"></div>
+<div th:replace="/fragment :: header"></div>
 
-<div class="container">
-    <h2>Contact Us</h2>
-    <p>If you have any questions or need support, please reach out to us using the form below.</p>
+<img src="/images/cs.png" alt="Background Image"
+     style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; object-fit:cover;" />
 
-    <form th:action="@{/contact}" method="post">
-        <label for="name">Name:</label><br/>
-        <input type="text" id="name" name="name" required/><br/><br/>
 
-        <label for="email">Email:</label><br/>
-        <input type="email" id="email" name="email" required/><br/><br/>
+<div class="container contact">
+<h2>Contact Us</h2>
+<form th:action="@{/contact}" method="post">
+    <label for="name">Your Name</label>
+    <input type="text" id="name" name="name" required>
 
-        <label for="message">Message:</label><br/>
-        <textarea id="message" name="message" rows="5" required></textarea><br/><br/>
+    <label for="email">Your Email</label>
+    <input type="email" id="email" name="email" required>
 
-        <button type="submit">Send Message</button>
-    </form>
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" name="subject" required>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" required></textarea>
+
+    <button type="submit">Send Message</button>
+</form>
+
+<div class="info">
+    <p><strong>Address:</strong> Neit Computer Institute, Rajarhat, West Bengal, India</p>
+    <p><strong>Email:</strong> info@neit.com | <strong>Phone:</strong> +91-9876543210</p>
+    <p>We’ll get back to you within 24 hours.</p>
+</div>
 </div>
 
 <!-- Include footer fragment -->
-<div th:replace="/footer :: footer"></div>
+<div th:replace="/fragment :: footer"></div>
 
 </body>
 </html>

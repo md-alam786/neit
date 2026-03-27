@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Student List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 
     <!-- DataTables CSS + JS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 
     <!-- Simple CSS styling -->
@@ -56,10 +60,15 @@
     </style>
 </head>
 <body>
+
+<!-- Include header fragment -->
+<div th:replace="/fragment :: header"></div>
+
+<div class="container-student-list">
 <h2>Student List</h2>
 
 <!-- Add Student Button -->
-<a th:href="@{/students/form}" class="add-btn">Add Student</a>
+<a th:href="@{/students/register}" class="add-btn">Add Student</a>
 
 <table id="studentTable">
     <thead>
@@ -84,22 +93,35 @@
         <td th:text="${student.gender}"></td>
         <td th:text="${student.qualification}"></td>
 
-        <td class="action-links">
-            <a th:href="@{/students/view/{id}(id=${student.studentId})}">View</a> |
-            <a th:href="@{/students/edit/{id}(id=${student.studentId})}">Edit</a> |
-            <a th:href="@{/students/delete/{id}(id=${student.studentId})}"
-               onclick="return confirm('Are you sure you want to delete this student?');">
-                Delete
+        <td>
+        <div class="action-icons">
+            <a th:href="@{/students/view/{id}(id=${student.studentId})}" title="View">
+                <i class="fa fa-eye"></i>
             </a>
-        </td>
+            <a th:href="@{/students/edit/{id}(id=${student.studentId})}" title="Edit">
+                <i class="fa fa-edit"></i>
+            </a>
+            <form th:action="@{/students/delete/{id}(id=${student.studentId})}" method="post" class="delete-form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this student?')" title="Delete">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </form>
+        </div>
+</td>
     </tr>
     </tbody>
 </table>
+</div>
+
+<!-- Include footer fragment -->
+<div th:replace="/fragment :: footer"></div>
+
+</body>
+
 <script>
     $(document).ready(function() {
         $('#studentTable').DataTable();
     });
 </script>
-
-</body>
 </html>
